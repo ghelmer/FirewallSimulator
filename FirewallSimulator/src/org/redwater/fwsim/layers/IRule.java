@@ -1,6 +1,7 @@
 package org.redwater.fwsim.layers;
 
 import org.pcap4j.packet.Packet;
+import org.redwater.fwsim.exceptions.InvalidFieldValueException;
 import org.redwater.fwsim.exceptions.UnhandledFieldNameException;
 
 public interface IRule {
@@ -24,5 +25,5 @@ public interface IRule {
 	 * @param value - value to use for field
 	 * @throws UnhandledFieldNameException on unhandled field name
 	 */
-	public void setRuleField(String fieldName, String value) throws UnhandledFieldNameException;
+	public void setRuleField(String fieldName, String value) throws UnhandledFieldNameException, InvalidFieldValueException;
 }

@@ -3,8 +3,8 @@ package org.redwater.fwsim.layers;
 import java.util.List;
 import java.util.Map.Entry;
 
-import org.apache.commons.net.util.SubnetUtils;
 import org.pcap4j.packet.Packet;
+import org.redwater.fwsim.exceptions.InvalidFieldValueException;
 import org.redwater.fwsim.exceptions.UnhandledFieldNameException;
 
 /**
@@ -12,7 +12,7 @@ import org.redwater.fwsim.exceptions.UnhandledFieldNameException;
  * @author ghelmer
  */
 public class Rule implements IRule {
-	protected RuleActions ruleAction;
+	private RuleActions ruleAction;
 
 	public Rule () {
 		ruleAction = null;
@@ -22,28 +22,28 @@ public class Rule implements IRule {
 	 * Construct a Rule using the list of fields and values.
 	 * @throws UnhandledFieldNameException 
 	 */
-	public Rule(List<Entry<String, String>> parameters) throws UnhandledFieldNameException {
+	public Rule(List<Entry<String, String>> parameters) throws UnhandledFieldNameException, InvalidFieldValueException {
 		for (Entry<String, String> e : parameters) {
 			setRuleField(e.getKey(), e.getValue());
 		}
 	}
 	
 	/**
-	 * Default action access method. Always fails.
+	 * Action access method..
 	 * @param packet - packet to check
-	 * @return null
+	 * @return action assigned to rule
 	 */
 	public RuleActions getAction(Packet packet) {
-		return null;
+		return ruleAction;
 	}
 	
 	/**
-	 * Default rule match method. Always fails.
+	 * Default rule match method. Always succeeds.
 	 * @param packet - packet to check
-	 * @return false
+	 * @return true
 	 */
 	public boolean matchesRule(Packet packet) {
-		return false;
+		return true;
 	}
 
 	/**
@@ -52,7 +52,7 @@ public class Rule implements IRule {
 	 * @param value - value to use for field
 	 * @throws UnhandledFieldNameException always
 	 */
-	public void setRuleField(String fieldName, String value) throws UnhandledFieldNameException {
+	public void setRuleField(String fieldName, String value) throws UnhandledFieldNameException, InvalidFieldValueException {
 		switch (fieldName) {
 		case "action":
 			ruleAction = actionToRuleAction(value);

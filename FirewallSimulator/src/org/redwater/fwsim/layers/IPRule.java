@@ -8,6 +8,7 @@ import org.apache.commons.net.util.SubnetUtils.SubnetInfo;
 import org.pcap4j.packet.IpPacket;
 import org.pcap4j.packet.Packet;
 import org.pcap4j.util.Packets;
+import org.redwater.fwsim.exceptions.InvalidFieldValueException;
 import org.redwater.fwsim.exceptions.UnhandledFieldNameException;
 
 public class IPRule extends Rule {
@@ -31,7 +32,7 @@ public class IPRule extends Rule {
 	 * Construct an IPRule using the list of fields and values.
 	 * @throws UnhandledFieldNameException 
 	 */
-	public IPRule(List<Entry<String, String>> parameters) throws UnhandledFieldNameException {
+	public IPRule(List<Entry<String, String>> parameters) throws UnhandledFieldNameException, InvalidFieldValueException {
 		super();
 		srcAddressMatch = null;
 		srcAddressMatchFlag = false;
@@ -42,15 +43,6 @@ public class IPRule extends Rule {
 		}
 	}
 	
-	/**
-	 * Default action access method. Always fails.
-	 * @param packet - packet to check
-	 * @return null
-	 */
-	public RuleActions getAction(Packet packet) {
-		return ruleAction;
-	}
-
 	/**
 	 * Determine if the packet matches this rule.
 	 * @param packet Packet to evaluate.
@@ -80,7 +72,8 @@ public class IPRule extends Rule {
 				return false;
 			}
 		}
-		return true;
+		// So far, this rule matches. Evaluate the superclass on the packet.
+		return super.matchesRule(packet);
 	}
 	
 	/**
@@ -89,7 +82,7 @@ public class IPRule extends Rule {
 	 * @param value - value to use for field
 	 * @throws UnhandledFieldNameException always
 	 */
-	public void setRuleField(String fieldName, String value) throws UnhandledFieldNameException {
+	public void setRuleField(String fieldName, String value) throws UnhandledFieldNameException, InvalidFieldValueException {
 		switch (fieldName) {
 		case "srcAddress":
 			srcAddressMatch = new SubnetUtils(value).getInfo();
