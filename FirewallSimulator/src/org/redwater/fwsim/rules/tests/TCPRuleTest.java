@@ -1,4 +1,4 @@
-package org.redwater.fwsim.layers.tests;
+package org.redwater.fwsim.rules.tests;
 
 import java.net.Inet4Address;
 import java.util.AbstractMap.SimpleEntry;
@@ -21,7 +21,7 @@ import org.pcap4j.packet.UnknownPacket;
 import org.pcap4j.packet.namednumber.IpNumber;
 import org.pcap4j.packet.namednumber.IpVersion;
 import org.pcap4j.packet.namednumber.TcpPort;
-import org.redwater.fwsim.layers.TCPRule;
+import org.redwater.fwsim.rules.TCPRule;
 
 public class TCPRuleTest {
 	private TCPRule tcpRule1; 

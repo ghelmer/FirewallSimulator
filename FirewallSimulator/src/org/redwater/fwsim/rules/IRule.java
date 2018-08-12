@@ -1,4 +1,4 @@
-package org.redwater.fwsim.layers;
+package org.redwater.fwsim.rules;
 
 import org.pcap4j.packet.Packet;
 import org.redwater.fwsim.exceptions.InvalidFieldValueException;

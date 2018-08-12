@@ -1,4 +1,4 @@
-package org.redwater.fwsim.layers;
+package org.redwater.fwsim.rules;
 
 import java.util.List;
 import java.util.AbstractMap.SimpleEntry;

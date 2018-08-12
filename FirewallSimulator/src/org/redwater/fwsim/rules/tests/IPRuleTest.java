@@ -1,4 +1,4 @@
-package org.redwater.fwsim.layers.tests;
+package org.redwater.fwsim.rules.tests;
 
 import static org.junit.Assert.*;
 
@@ -14,7 +14,7 @@ import org.pcap4j.packet.IpV4Rfc1349Tos;
 import org.pcap4j.packet.Packet;
 import org.pcap4j.packet.namednumber.IpNumber;
 import org.pcap4j.packet.namednumber.IpVersion;
-import org.redwater.fwsim.layers.IPRule;
+import org.redwater.fwsim.rules.IPRule;
 
 public class IPRuleTest {
 	private IPRule ipRule1; 

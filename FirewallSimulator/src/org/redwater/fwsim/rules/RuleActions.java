@@ -1,4 +1,4 @@
-package org.redwater.fwsim.layers;
+package org.redwater.fwsim.rules;
 
 /**
  * List of possible return values when a rule matches a packet. 
