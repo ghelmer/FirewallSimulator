@@ -76,7 +76,7 @@ public class UDPRule extends IPRule {
 		if (dstPortRanges != null) {
 			int dstPort = udpPacket.getHeader().getDstPort().valueAsInt();
 			boolean matched = false;
-			for (Entry<Integer, Integer> r : srcPortRanges) {
+			for (Entry<Integer, Integer> r : dstPortRanges) {
 				if (dstPort >= r.getKey() && dstPort <= r.getValue()) { 
 					matched = true;
 					break;
@@ -154,4 +154,44 @@ public class UDPRule extends IPRule {
 		}
 	}
 
+	/**
+	 * Return a text representation of this rule.
+	 * @return text
+	 */
+	public String toString() {
+		StringBuilder s = new StringBuilder();
+
+		s.append("udp");
+		// Check source ports.
+		if (srcPortRanges != null) {
+			for (Entry<Integer, Integer> r : srcPortRanges) {
+				s.append(' ');
+				s.append("srcPort ");
+				int start = r.getKey();
+				int end = r.getValue();
+				if (start == end) {
+					s.append(String.format("%d", start));
+				} else {
+					s.append(String.format("%d-%d", start, end));
+				}
+			}
+		}
+		// Check destination ports.
+		if (dstPortRanges != null) {
+			for (Entry<Integer, Integer> r : dstPortRanges) {
+				s.append(' ');
+				s.append("dstPort ");
+				int start = r.getKey();
+				int end = r.getValue();
+				if (start == end) {
+					s.append(String.format("%d", start));
+				} else {
+					s.append(String.format("%d-%d", start, end));
+				}
+			}
+		}
+		s.append(' ');
+		s.append(super.toString());
+		return s.toString();
+	}
 }

@@ -96,4 +96,30 @@ public class IPRule extends Rule {
 		}
 	}
 
+	/**
+	 * Return a text representation of this rule.
+	 * @return text
+	 */
+	public String toString() {
+		StringBuilder s = new StringBuilder();
+
+		// Check source address.
+		if (srcAddressMatch != null) {
+			s.append("srcAddress ");
+			s.append(srcAddressMatch.getCidrSignature());
+		}
+		// Check destination address.
+		if (dstAddressMatch != null) {
+			if (s.length() > 0) {
+				s.append(' ');
+			}
+			s.append("dstAddress ");
+			s.append(dstAddressMatch.getCidrSignature());
+		}
+		if (s.length() > 0) {
+			s.append(' ');
+		}
+		s.append(super.toString());
+		return s.toString();
+	}
 }

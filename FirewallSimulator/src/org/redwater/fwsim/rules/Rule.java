@@ -77,4 +77,21 @@ public class Rule implements IRule {
 		}
 		throw new UnhandledFieldNameException(String.format("Invalid rule action %s", action));
 	}
+	
+	/**
+	 * Return a text representation of this rule.
+	 * @return text
+	 */
+	public String toString() {
+		switch (ruleAction) {
+		case ACCEPT:
+			return "action accept";
+		case DENY:
+			return "action deny";
+		case REJECT:
+			return "action reject";
+		default:
+			return "action INVALID";
+		}
+	}
 }
