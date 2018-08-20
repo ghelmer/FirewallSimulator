@@ -155,12 +155,20 @@ public class RuleListTest {
 
 	@Before
 	public void setUp() throws Exception {
+		IRule r;
 		rules = new RuleList();
-		rules.addRule("tcp srcAddress 192.168.1.0/24 dstAddress 0.0.0.0/0 srcPort 25 action accept");
-		rules.addRule("tcp srcAddress 0.0.0.0/0 dstAddress 192.168.1.0/24 dstPort 25 action deny");
-		rules.addRule("tcp action accept");
-		rules.addRule("udp srcAddress 192.168.1.0/24 dstAddress 0.0.0.0/0 srcPort 53 action accept");
-		rules.addRule("udp srcAddress 0.0.0.0/0 dstAddress 192.168.1.0/24 dstPort 53 action deny");
+		r = rules.addRule("tcp srcAddress 192.168.1.0/24 dstAddress 0.0.0.0/0 srcPort 25 action accept");
+		r.setRuleMetadata("TCP rule 1");
+		r = rules.addRule("tcp srcAddress 0.0.0.0/0 dstAddress 192.168.1.0/24 dstPort 25 action deny");
+		r.setRuleMetadata("TCP rule 2");
+		r = rules.addRule("tcp action accept");
+		r.setRuleMetadata("TCP rule 3");
+		r = rules.addRule("udp srcAddress 192.168.1.0/24 dstAddress 0.0.0.0/0 srcPort 53 action accept");
+		r.setRuleMetadata("UDP rule 1");
+		r = rules.addRule("udp srcAddress 0.0.0.0/0 dstAddress 192.168.1.0/24 dstPort 53 action deny");
+		r.setRuleMetadata("UDP rule 2");
+		r = rules.addRule("udp action accept");
+		r.setRuleMetadata("UDP rule 3");
 
 		/*
 		 * Build TCP packets for testing.
@@ -268,14 +276,17 @@ public class RuleListTest {
 	@Test
 	public void test() {
 		IRule r = rules.checkRules(udpPacket1);
+		assertEquals(r.getRuleMetadata(), "UDP rule 1");
 		System.out.printf("udpPacket1 matched rule %s\n", r.toString());
 		r = rules.checkRules(udpPacket2);
+		assertEquals(r.getRuleMetadata(), "UDP rule 2");
 		System.out.printf("udpPacket2 matched rule %s\n", r.toString());
 		r = rules.checkRules(tcpPacket1);
+		assertEquals(r.getRuleMetadata(), "TCP rule 1");
 		System.out.printf("tcpPacket1 matched rule %s\n", r.toString());
 		r = rules.checkRules(tcpPacket2);
+		assertEquals(r.getRuleMetadata(), "TCP rule 2");
 		System.out.printf("tcpPacket2 matched rule %s\n", r.toString());
-		fail("Not yet implemented");
 	}
 
 }
