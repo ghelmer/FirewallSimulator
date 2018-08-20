@@ -13,9 +13,11 @@ import org.redwater.fwsim.exceptions.UnhandledFieldNameException;
  */
 public class Rule implements IRule {
 	private RuleActions ruleAction;
+	private String metadata;
 
 	public Rule () {
 		ruleAction = null;
+		metadata = "";
 	}
 	
 	/**
@@ -79,19 +81,35 @@ public class Rule implements IRule {
 	}
 	
 	/**
+	 * Set metadata for a rule (such as the number in the list of rules).
+	 * @param metadata - arbitrary string data
+	 */
+	public void setRuleMetadata(String info) {
+		metadata = info;
+	}
+
+	/**
+	 * Get metadata from a rule (such as the number in the list of rules).
+	 * @return metadata - arbitrary string data
+	 */
+	public String getRuleMetadata() {
+		return metadata;
+	}
+	
+	/**
 	 * Return a text representation of this rule.
 	 * @return text
 	 */
 	public String toString() {
 		switch (ruleAction) {
 		case ACCEPT:
-			return "action accept";
+			return String.format("%s action accept", metadata);
 		case DENY:
-			return "action deny";
+			return String.format("%s action deny", metadata);
 		case REJECT:
-			return "action reject";
+			return String.format("%s action reject", metadata);
 		default:
-			return "action INVALID";
+			return String.format("%s action INVALID", metadata);
 		}
 	}
 }

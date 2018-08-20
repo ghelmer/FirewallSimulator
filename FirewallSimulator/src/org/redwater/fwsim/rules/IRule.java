@@ -26,4 +26,16 @@ public interface IRule {
 	 * @throws UnhandledFieldNameException on unhandled field name
 	 */
 	public void setRuleField(String fieldName, String value) throws UnhandledFieldNameException, InvalidFieldValueException;
+	
+	/**
+	 * Set metadata for a rule (such as the number in the list of rules).
+	 * @param metadata - arbitrary string data
+	 */
+	public void setRuleMetadata(String info);
+
+	/**
+	 * Get metadata from a rule (such as the number in the list of rules).
+	 * @return metadata - arbitrary string data
+	 */
+	public String getRuleMetadata();
 }
