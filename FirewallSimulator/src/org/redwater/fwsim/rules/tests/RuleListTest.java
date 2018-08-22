@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.net.Inet4Address;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -21,11 +22,14 @@ import org.pcap4j.packet.namednumber.IpNumber;
 import org.pcap4j.packet.namednumber.IpVersion;
 import org.pcap4j.packet.namednumber.TcpPort;
 import org.pcap4j.packet.namednumber.UdpPort;
+import org.redwater.fwsim.exceptions.InvalidFieldValueException;
+import org.redwater.fwsim.exceptions.UnhandledFieldNameException;
 import org.redwater.fwsim.rules.IRule;
 import org.redwater.fwsim.rules.RuleList;
 
 public class RuleListTest {
 	private RuleList rules;
+	private RuleList rulesFromScanner;
 	private Packet tcpPacket1;
 	private Packet tcpPacket2;
 	private Packet udpPacket1;
@@ -169,6 +173,19 @@ public class RuleListTest {
 		r.setRuleMetadata("UDP rule 2");
 		r = rules.addRule("udp action accept");
 		r.setRuleMetadata("UDP rule 3");
+		
+		// Test parsing a list of lines of text.
+		String[] lines = {
+				"# This is a comment line",
+				"tcp srcAddress 192.168.1.0/24 dstAddress 0.0.0.0/0 srcPort 25 action accept",
+				"tcp srcAddress 0.0.0.0/0 dstAddress 192.168.1.0/24 dstPort 25 action deny",
+				"tcp action accept",
+				"udp srcAddress 192.168.1.0/24 dstAddress 0.0.0.0/0 srcPort 53 action accept",
+				"udp srcAddress 0.0.0.0/0 dstAddress 192.168.1.0/24 dstPort 53 action deny",
+				"udp action accept # inline comment"
+		};
+		rulesFromScanner = new RuleList();
+		rulesFromScanner.parse(new Scanner(String.join("\n", lines)));
 
 		/*
 		 * Build TCP packets for testing.
@@ -289,4 +306,19 @@ public class RuleListTest {
 		System.out.printf("tcpPacket2 matched rule %s\n", r.toString());
 	}
 
+	@Test
+	public void test2() {		
+		IRule r = rulesFromScanner.checkRules(udpPacket1);
+		assertEquals(r.getRuleMetadata(), "Line 5");
+		System.out.printf("udpPacket1 matched fromScanner rule %s %s\n", r.getRuleMetadata(), r.toString());
+		r = rulesFromScanner.checkRules(udpPacket2);
+		assertEquals(r.getRuleMetadata(), "Line 6");
+		System.out.printf("udpPacket2 matched fromScanner rule %s %s\n", r.getRuleMetadata(), r.toString());
+		r = rulesFromScanner.checkRules(tcpPacket1);
+		assertEquals(r.getRuleMetadata(), "Line 2");
+		System.out.printf("tcpPacket1 matched fromScanner rule %s %s\n", r.getRuleMetadata(), r.toString());
+		r = rulesFromScanner.checkRules(tcpPacket2);
+		assertEquals(r.getRuleMetadata(), "Line 3");
+		System.out.printf("tcpPacket2 matched fromScanner rule %s %s\n", r.getRuleMetadata(), r.toString());
+	}
 }

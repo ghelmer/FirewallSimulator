@@ -2,6 +2,7 @@ package org.redwater.fwsim.rules;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import org.pcap4j.packet.Packet;
 import org.redwater.fwsim.exceptions.InvalidFieldValueException;
@@ -20,6 +21,47 @@ public class RuleList {
 	 */
 	public RuleList() {
 		rules = new ArrayList<>();
+	}
+
+	/**
+	 * Parse a list of Strings into rules.
+	 * @throws InvalidFieldValueException 
+	 * @throws UnhandledFieldNameException 
+	 */
+	public void parse(List<String> strings) throws UnhandledFieldNameException, InvalidFieldValueException {
+		for (String s : strings) {
+			addRule(s);
+		}
+	}
+	
+	/**
+	 * Parse lines from an input stream into rules. Comments begin with '#'.
+	 * Add metadata to each rule indicating the source line number.
+	 * @throws InvalidFieldValueException 
+	 * @throws UnhandledFieldNameException 
+	 */
+	public void parse(Scanner in) throws UnhandledFieldNameException, InvalidFieldValueException {
+		int line = 0;
+		while (in.hasNextLine()) {
+			line++;
+			String s = in.nextLine();
+			
+			// Trim lines at # (used for comments).
+			int hashIndex = s.indexOf('#');
+			if (hashIndex != -1) {
+				s = s.substring(0,  hashIndex);
+			}
+			
+			// Skip empty lines.
+			s = s.trim();
+			if (s.length() == 0) {
+				continue;
+			}
+			
+			// Parse the remaining string, and set a default metadata.
+			IRule r = addRule(s);
+			r.setRuleMetadata(String.format("Line %d", line));
+		}
 	}
 	
 	/**
