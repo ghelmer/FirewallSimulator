@@ -22,8 +22,6 @@ import org.pcap4j.packet.namednumber.IpNumber;
 import org.pcap4j.packet.namednumber.IpVersion;
 import org.pcap4j.packet.namednumber.TcpPort;
 import org.pcap4j.packet.namednumber.UdpPort;
-import org.redwater.fwsim.exceptions.InvalidFieldValueException;
-import org.redwater.fwsim.exceptions.UnhandledFieldNameException;
 import org.redwater.fwsim.rules.IRule;
 import org.redwater.fwsim.rules.RuleList;
 
